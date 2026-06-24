@@ -1,5 +1,8 @@
 import service from "@/utils/request";
 import type {
+  ConsultationEmotion,
+  ConsultationMessage,
+  ConsultationSessionListResponse,
   CreateNewSessionResponse,
   SessionList,
   NewSession,
@@ -36,7 +39,10 @@ export const createNewSession = (data: NewSession) => {
 
 //获取会话列表
 export const getSessionList = (params: SessionList) => {
-  return service.get("/psychological-chat/sessions", { params });
+  return service.get<
+    ConsultationSessionListResponse,
+    ConsultationSessionListResponse
+  >("/psychological-chat/sessions", { params });
 };
 
 //删除会话
@@ -48,7 +54,7 @@ export const deleteSessionMessage = (params: { sessionId: string }) => {
 
 //获取会话消息
 export const getSessionMessage = (params: { sessionId: string }) => {
-  return service.get(
+  return service.get<ConsultationMessage[], ConsultationMessage[]>(
     `/psychological-chat/sessions/${params.sessionId}/messages`,
     {
       params,
@@ -58,7 +64,7 @@ export const getSessionMessage = (params: { sessionId: string }) => {
 
 //获取会话情绪分析结果
 export const getSessionEmotion = (params: { sessionId: string }) => {
-  return service.get(
+  return service.get<ConsultationEmotion, ConsultationEmotion>(
     `/psychological-chat/session/${params.sessionId}/emotion`,
     { params },
   );
