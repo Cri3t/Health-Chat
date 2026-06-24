@@ -133,6 +133,15 @@ const startSession = async (userMessage: string) => {
   }
 };
 
+const appendUserMessage = (userMessage: string) => {
+  messages.value.push({
+    id: Date.now(),
+    senderType: 1,
+    content: userMessage,
+    createdAt: new Date().toISOString(),
+  });
+};
+
 //发送消息
 const sendMessage = () => {
   if (!userInput.value.trim()) return;
@@ -144,8 +153,16 @@ const sendMessage = () => {
   userInput.value = "";
   if (currentSession.value?.status === "TEMP") {
     startSession(userMessage);
+    return;
   }
-  // todo:status的值为ACTIVE
+
+  if (!currentSession.value?.sessionId) {
+    startSession(userMessage);
+    return;
+  }
+
+  appendUserMessage(userMessage);
+  handleAIResponse(currentSession.value.sessionId, userMessage);
 };
 
 //Enter发送逻辑

@@ -55,12 +55,10 @@ const handleLogin = async () => {
   if (!formRef.value) return;
   await formRef.value.validate((valid) => {
     if (valid) {
-      // console.log("登录表单数据:", formData.value);
       loginApi(formData.value)
         .then((data: any) => {
           console.log(data);
           if (data.token) {
-            // console.log("即将存储的数据:", data);
             localStorage.setItem("token", data.token);
             localStorage.setItem("userInfo", JSON.stringify(data.userInfo));
             router.replace("/");
